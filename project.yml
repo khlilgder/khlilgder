@@ -1,0 +1,64 @@
+name: PS3iOS-Starter
+options:
+  minimumXcodeGenVersion: 2.38.0
+  deploymentTarget:
+    iOS: "15.0"
+packages: {}
+targets:
+  PS3iOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources/PS3iOS
+      - path: Resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.ps3ios
+        SWIFT_VERSION: 5.9
+        IPHONEOS_DEPLOYMENT_TARGET: 15.0
+        ENABLE_BITCODE: NO
+    scheme:
+      testTargets: []
+    dependencies:
+      - target: EmuBridge
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleDisplayName: PS3iOS
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiresFullScreen: true
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UIAppFonts: []
+        UIUserInterfaceStyle: Dark
+  EmuCore:
+    type: library.static
+    platform: iOS
+    sources:
+      - path: Sources/EmuCore
+    settings:
+      base:
+        CLANG_CXX_LANGUAGE_STANDARD: "gnu++20"
+        CLANG_CXX_LIBRARY: "libc++"
+        GCC_ENABLE_CPP_EXCEPTIONS: YES
+        GCC_ENABLE_CPP_RTTI: YES
+  EmuBridge:
+    type: library.static
+    platform: iOS
+    sources:
+      - path: Sources/EmuBridge
+    settings:
+      base:
+        SWIFT_VERSION: 5.9
+        CLANG_CXX_LANGUAGE_STANDARD: "gnu++20"
+        GCC_ENABLE_CPP_EXCEPTIONS: YES
+        GCC_ENABLE_CPP_RTTI: YES
+        OTHER_LDFLAGS: "-lc++"
+    dependencies:
+      - target: EmuCore
+    headers:
+      public:
+        - Sources/EmuBridge/EmuBridge.h
